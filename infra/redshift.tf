@@ -5,7 +5,6 @@ resource "random_password" "redshift-password" {
   special          = true
   numeric          = true
   upper            = true
-  lower            = true
 }
 
 resource "aws_secretsmanager_secret" "redshift-admin-secrets" {
@@ -52,18 +51,17 @@ resource "aws_redshift_subnet_group" "redshift-subnet-group" {
 
 # CLUSTER
 resource "aws_redshift_cluster" "redshift_cluster" {
-  cluster_identifier           = "randomdata-dev-redshift-cluster"
-  database_name                = "random_data_db"
-  master_username              = "randomdata-redshift-admin"
-  master_password              = random_password.redshift-password.result
-  node_type                    = "ra3.large"
-  cluster_type                 = "multi-node"
-  number_of_nodes              = 2
-  publicly_accessible          = true
-  port                         = 5439
-  encrypted                    = true
-  cluster_subnet_group_name    = aws_redshift_subnet_group.redshift-subnet-group.name
-  vpc_security_group_ids       = [aws_security_group.redshift-security-group.id]
-  skip_final_snapshot          = true
-  cluster_parameter_group_name = aws_redshift_parameter_group.redshfit-param-group.name
+  cluster_identifier        = "randomdata-dev-redshift-cluster"
+  database_name             = "random_data_db"
+  master_username           = "randomdata-redshift-admin"
+  master_password           = random_password.redshift-password.result
+  node_type                 = "ra3.large"
+  cluster_type              = "multi-node"
+  number_of_nodes           = 2
+  publicly_accessible       = true
+  port                      = 5439
+  encrypted                 = true
+  cluster_subnet_group_name = aws_redshift_subnet_group.redshift-subnet-group.name
+  vpc_security_group_ids    = [aws_security_group.redshift-security-group.id]
+  skip_final_snapshot       = true
 }
