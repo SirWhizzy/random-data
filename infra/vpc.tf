@@ -1,61 +1,57 @@
 # vpc
-resource "aws_vpc" "redshift_vpc" {
+resource "aws_vpc" "vpc" {
   cidr_block = "10.0.0.0/16"
-
   enable_dns_support   = true
   enable_dns_hostnames = true
 
   tags = {
-    Name = "randomdata-vpc"
+    Name = "tolu-vpc"
   }
 }
 
-
 # Public subnet 1
 resource "aws_subnet" "public-subnet-a" {
-  vpc_id                  = aws_vpc.redshift_vpc.id
+  vpc_id                  = aws_vpc.vpc.id
   cidr_block              = "10.0.0.0/24"
   availability_zone       = "us-east-1a"
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "randomdata-pub-subnet-a"
+    Name = "randomuser-pub-subnet-a"
   }
 }
 
 # Public subnet 2
 resource "aws_subnet" "public-subnet-b" {
-  vpc_id                  = aws_vpc.redshift_vpc.id
+  vpc_id                  = aws_vpc.vpc.id
   cidr_block              = "10.0.1.0/24"
   availability_zone       = "us-east-1b"
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "randomdata-pub-subnet-b"
+    Name = "randomuser-pub-subnet-b"
   }
 }
 
-
 # IGW
-resource "aws_internet_gateway" "redshift_igw" {
-  vpc_id = aws_vpc.redshift_vpc.id
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "randomdata-igw"
-  } 
+    Name = "randomuser-igw"
+  }
 }
 
-
 resource "aws_route_table" "public-route-table" {
-  vpc_id = aws_vpc.redshift_vpc.id
+  vpc_id = aws_vpc.vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.redshift_igw.id
+    gateway_id = aws_internet_gateway.igw.id
   }
 
   tags = {
-    Name = "randomdata-pub-rt"
+    Name = "randomuser-pub-rt"
   }
 }
 
@@ -73,7 +69,7 @@ resource "aws_route_table_association" "pub_rt_assoc_b" {
 # SECURITY GROUP CONFIG
 resource "aws_security_group" "redshift-security-group" {
   name   = "randomdata-redshift-sg"
-  vpc_id = aws_vpc.redshift_vpc.id
+  vpc_id = aws_vpc.vpc.id
 }
 
 resource "aws_vpc_security_group_ingress_rule" "redshift-ingress-rule" {

@@ -14,7 +14,7 @@ provider "aws" {
     tags = {
       ManagedBy   = "Terraform"
       Environment = "Dev"
-      Project     = "Random Data Project"
+      Project     = "Random User Project"
     }
   }
 }
